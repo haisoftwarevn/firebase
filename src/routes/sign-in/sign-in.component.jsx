@@ -6,6 +6,9 @@ import {
   signInWithGoogleRedicrect,
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase.utils";
+
+///
+import SignUpForm from "../../components/sign-up-form/sign-up-form.component";
 const SignIn = () => {
   const testRedirect = async () => {
     const response = await getRedirectResult(auth);
@@ -35,6 +38,8 @@ const SignIn = () => {
       <button onClick={signInWithGoogleRedicrect}>
         Sign In with Google Reditect
       </button>
+
+      <SignUpForm />
     </div>
   );
 };
