@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 import { getRedirectResult } from "firebase/auth"; // dùng cho redirect
@@ -12,7 +12,7 @@ import {
 
 import "./sign-in-form.styles.scss";
 
-import { UserContext } from "../../contexts/user.context";
+// import { UserContext } from "../../contexts/user.context";
 
 const defaultFormFields = {
   email: "",
@@ -23,7 +23,7 @@ const SignInForm = () => {
   const [formFields, setFormFileds] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  const { setCurrentUser } = useContext(UserContext);
+  // const { setCurrentUser } = useContext(UserContext);
 
   const resetFormField = () => {
     setFormFileds(defaultFormFields);
@@ -39,7 +39,7 @@ const SignInForm = () => {
       // await createUserDocumentFromAuth(response.user);
 
       // truyền biến
-      setCurrentUser(user);
+      // setCurrentUser(user);
       resetFormField();
     } catch (error) {
       switch (error.code) {
@@ -62,7 +62,8 @@ const SignInForm = () => {
 
   const signInWithGoogle = async () => {
     const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    // await createUserDocumentFromAuth(user);
+    // setCurrentUser(user);
   };
 
   ////////////////// login redirect google ///
@@ -74,7 +75,8 @@ const SignInForm = () => {
   const testRedirect = async () => {
     const response = await getRedirectResult(auth);
     if (response) {
-      await createUserDocumentFromAuth(response.user);
+      // await createUserDocumentFromAuth(response.user);
+      // setCurrentUser(response.user);
     }
   };
   useEffect(() => {
