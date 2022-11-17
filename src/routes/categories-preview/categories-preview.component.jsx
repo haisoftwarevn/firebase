@@ -8,7 +8,7 @@ const CategoriesPreview = () => {
   const { categoriesMap } = useContext(CategoriesContext);
 
   return (
-    <Fragment className="category-preview-container">
+    <Fragment>
       {Object.keys(categoriesMap).map((title) => {
         const products = categoriesMap[title];
         return (
