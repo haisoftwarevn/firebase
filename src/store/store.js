@@ -13,10 +13,15 @@ const middleWares = [process.env.NODE_ENV !== "production" && logger].filter(
   Boolean
 );
 
-const composeEnhancers = compose(applyMiddleware(...middleWares));
+///////////////////// cấu hình redux devtools
+const composeEnhancer =
+  (process.env.NODE_ENV !== "production" &&
+    window & window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
 
-/////////////////////
+// const composeEnhancers = compose(applyMiddleware(...middleWares));
 
+const composeEnhancers = composeEnhancer(applyMiddleware(...middleWares));
 /////////////persit
 const configPersist = {
   key: "root",
