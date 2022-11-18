@@ -5,9 +5,11 @@ import storage from "redux-persist/lib/storage";
 //import { legacy_createStore as createStore } from 'redux';
 // phòng trường hợp chạy không được
 import logger from "redux-logger";
-import thunk from "redux-thunk";
+// import thunk from "redux-thunk";
 import { rootReducer } from "./root-reducer";
 
+import createSagaMiddleware from "redux-saga";
+import { rootSaga } from "./root-saga";
 /// thunk
 
 // const thunkMiddleware = (store) => (next) => (action) => {
@@ -17,9 +19,11 @@ import { rootReducer } from "./root-reducer";
 // };
 
 ///middle ware
+
+const sagaMiddleware = createSagaMiddleware();
 const middleWares = [
   process.env.NODE_ENV !== "production" && logger,
-  thunk,
+  sagaMiddleware,
 ].filter(Boolean);
 
 ///////////////////// cấu hình redux devtools
@@ -43,5 +47,8 @@ const persistedReducer = persistReducer(configPersist, rootReducer);
 
 /////////////////store
 export const store = createStore(persistedReducer, undefined, composeEnhancers);
+
+///// saga more
+sagaMiddleware.run(rootSaga);
 
 export const persistor = persistStore(store);
