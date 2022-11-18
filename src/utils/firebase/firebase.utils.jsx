@@ -60,13 +60,9 @@ export const getCategoriesAndCollections = async () => {
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();
-    acc[title.toLowerCase()] = items; // thuộc tính được gán với mảng obj
-    return acc;
-  }, {});
-  return categoryMap;
+  // return categoryMap;
 };
 
 export const addCollectionAndDocuments = async (
