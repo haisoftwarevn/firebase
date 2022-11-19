@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_STYLE_CLASSES } from "../button/button.component";
-import { getRedirectResult } from "firebase/auth"; // dùng cho redirect
-import {
-  signInAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
-  signInWithGooglePopup,
-  auth, // dung cho redirect
-  signInWithGoogleRedicrect, // dung cho redirect
-} from "../../utils/firebase/firebase.utils";
 
 import "./sign-in-form.styles.scss";
 
+import {
+  googleSignInStart,
+  emailSignInStart,
+  googleRedirectSignInStart,
+} from "../../store/user/user.action";
 // import { UserContext } from "../../contexts/user.context";
 
 const defaultFormFields = {
@@ -23,7 +21,7 @@ const SignInForm = () => {
   const [formFields, setFormFileds] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  // const { setCurrentUser } = useContext(UserContext);
+  const dispatch = useDispatch();
 
   const resetFormField = () => {
     setFormFileds(defaultFormFields);
@@ -32,14 +30,7 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      const { user } = await signInAuthUserWithEmailAndPassword(
-        email,
-        password
-      );
-      // await createUserDocumentFromAuth(response.user);
-
-      // truyền biến
-      // setCurrentUser(user);
+      dispatch(emailSignInStart(email, password));
       resetFormField();
     } catch (error) {
       switch (error.code) {
@@ -61,26 +52,18 @@ const SignInForm = () => {
   };
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    // await createUserDocumentFromAuth(user);
-    // setCurrentUser(user);
+    dispatch(googleSignInStart());
   };
 
   ////////////////// login redirect google ///
   const logRedicrectUser = async () => {
-    const { user } = await signInWithGoogleRedicrect();
+    dispatch(googleRedirectSignInStart());
   };
 
   //////////// nhan ket qua redirec //
-  const testRedirect = async () => {
-    const response = await getRedirectResult(auth);
-    if (response) {
-      // await createUserDocumentFromAuth(response.user);
-      // setCurrentUser(response.user);
-    }
-  };
+
   useEffect(() => {
-    testRedirect();
+    //dispatch(saveRedirectResultToFirebase());
   }, []);
 
   return (

@@ -50,6 +50,16 @@ export const signInWithGooglePopup = () =>
 export const signInWithGoogleRedicrect = () =>
   signInWithRedirect(auth, googleProvider);
 
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+  return await signInWithEmailAndPassword(auth, email, password);
+};
+
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) =>
+  onAuthStateChanged(auth, callback);
+
 // firestore
 export const db = getFirestore();
 
@@ -81,6 +91,27 @@ export const addCollectionAndDocuments = async (
   console.log("done");
 };
 
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+////////////////////dùng saga cho user
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe(); // đây là hàm , không phải biến unsubscribe
+        resolve(userAuth); // ngay khi có data, thì unsubscribe và trả về dữ liệu
+      },
+      reject
+    );
+  });
+};
+
 ///// hand-made function for auth
 export const createUserDocumentFromAuth = async (
   userAuth,
@@ -105,21 +136,5 @@ export const createUserDocumentFromAuth = async (
     }
   }
 
-  return userDocRef;
+  return userSnapshot;
 };
-
-export const createAuthUserWithEmailAndPassword = async (email, password) => {
-  if (!email || !password) return;
-
-  return await createUserWithEmailAndPassword(auth, email, password);
-};
-
-export const signInAuthUserWithEmailAndPassword = async (email, password) => {
-  if (!email || !password) return;
-  return await signInWithEmailAndPassword(auth, email, password);
-};
-
-export const signOutUser = async () => await signOut(auth);
-
-export const onAuthStateChangedListener = (callback) =>
-  onAuthStateChanged(auth, callback);
